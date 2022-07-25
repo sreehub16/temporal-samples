@@ -1,5 +1,5 @@
 import * as pulumi from "@pulumi/pulumi";
-import * as mysql from "@pulumi/azure-native/dbformysql/latest";
+import * as mysql from "@pulumi/azure-native/dbformysql";
 
 export interface MySqlArgs {
     resourceGroupName: pulumi.Input<string>;
