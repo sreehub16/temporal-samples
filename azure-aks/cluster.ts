@@ -2,7 +2,7 @@ import * as pulumi from "@pulumi/pulumi";
 import * as azuread from "@pulumi/azuread";
 import * as random from "@pulumi/random";
 import * as tls from "@pulumi/tls";
-import * as containerservice from "@pulumi/azure-nextgen/containerservice/latest";
+import * as containerservice from "@pulumi/azure-native/containerservice/latest";
 
 export interface ClusterArgs {
     resourceGroupName: pulumi.Input<string>;
@@ -20,10 +20,10 @@ export class AksCluster extends pulumi.ComponentResource {
         super("my:example:AksCluster", name, args, undefined);
 
         // Create an AD service principal
-        const adApp = new azuread.Application("aks");
-        const adSp = new azuread.ServicePrincipal("aksSp", {
-            applicationId: adApp.applicationId,
-        }, {parent: this});
+        //const adApp = new azuread.Application("aks");
+      // const adSp = new azuread.ServicePrincipal("aksSp", {
+          //  applicationId: adApp.applicationId,
+       // }, {parent: this});
 
         // Generate random password
         const password = new random.RandomPassword("password", {
@@ -32,12 +32,12 @@ export class AksCluster extends pulumi.ComponentResource {
         }, {parent: this});
 
         // Create the Service Principal Password
-        const adSpPassword = new azuread.ServicePrincipalPassword("aksSpPassword", {
+       /* const adSpPassword = new azuread.ServicePrincipalPassword("aksSpPassword", {
             servicePrincipalId: adSp.id,
             value: password.result,
             endDate: "2099-01-01T00:00:00Z",
         }, {parent: this});
-
+         */
         // Generate an SSH key
         const sshKey = new tls.PrivateKey("ssh-key", {
             algorithm: "RSA",
@@ -80,8 +80,8 @@ export class AksCluster extends pulumi.ComponentResource {
             nodeResourceGroup: pulumi.interpolate`MC_${clusterName}`,
             resourceName: clusterName,
             servicePrincipalProfile: {
-                clientId: adApp.applicationId,
-                secret: adSpPassword.value,
+                clientId: '45300139-f2c4-4051-8129-c362563999db',
+                secret: 'mU18Q~OFAy4-KuPfqggGkLdndOpiajDHjoPiAbFG',
             },
         }, {parent: this});  
         

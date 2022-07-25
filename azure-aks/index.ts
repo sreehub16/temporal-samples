@@ -1,4 +1,4 @@
-import * as resources from "@pulumi/azure-nextgen/resources/latest";
+import * as resources from "@pulumi/azure-native/resources";
 
 import { resourceGroupName, mysqlPassword } from "./config";
 import { MySql } from "./mysql";
@@ -7,22 +7,22 @@ import { Temporal } from "./temporal";
 
 const resourceGroup = new resources.ResourceGroup("resourceGroup", {
     resourceGroupName: resourceGroupName,
-    location: "WestEurope",
+    location: "CentralUS",
 });
 
 const database = new MySql("mysql", {
     resourceGroupName: resourceGroup.name,
     location: resourceGroup.location,
-    administratorLogin: "mikhail",
+    administratorLogin: "sree",
     administratorPassword: mysqlPassword,
 });
 
 const cluster = new AksCluster("aks", {
     resourceGroupName: resourceGroup.name,
     location: resourceGroup.location,
-    kubernetesVersion: "1.16.13",
+    kubernetesVersion: "1.22.11",
     vmSize: "Standard_DS2_v2",
-    vmCount: 3,
+    vmCount: 2,
 });
 
 const temporal = new Temporal("temporal", {
