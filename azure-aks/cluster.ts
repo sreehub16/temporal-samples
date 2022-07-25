@@ -2,7 +2,7 @@ import * as pulumi from "@pulumi/pulumi";
 import * as azuread from "@pulumi/azuread";
 import * as random from "@pulumi/random";
 import * as tls from "@pulumi/tls";
-import * as containerservice from "@pulumi/azure-native";
+import * as containerservice from "@pulumi/azure-native/containerservice";
 
 export interface ClusterArgs {
     resourceGroupName: pulumi.Input<string>;
@@ -45,7 +45,7 @@ export class AksCluster extends pulumi.ComponentResource {
         }, {parent: this});
 
         const clusterName = pulumi.interpolate`${args.resourceGroupName}-aks`;
-        const cluster = new containerservice.containerservice.ManagedCluster("managedCluster", {
+        const cluster = new containerservice.ManagedCluster("managedCluster", {
             resourceGroupName: args.resourceGroupName,
             addonProfiles: {
                 KubeDashboard: {
@@ -86,7 +86,7 @@ export class AksCluster extends pulumi.ComponentResource {
         }, {parent: this});  
         
         const creds = pulumi.all([cluster.name, args.resourceGroupName]).apply(([clusterName, rgName]) => {
-            return containerservice.containerservice.listManagedClusterUserCredentials({
+            return containerservice.listManagedClusterUserCredentials({
                 resourceGroupName: rgName,
                 resourceName: clusterName,
             });
